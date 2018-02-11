@@ -16,6 +16,17 @@ router.get("/", function(req, res) {
   });
 });
 
+router.get("/:n", function(req, res) {
+  var sellerId = req.params.n;
+  Transaction.find({"sellerId": sellerId}, function(err, transactions) {
+    if (err) {
+      console.log(err);
+      res.send(false);
+    } else {
+      res.send(transactions);
+    }
+  })
+});
 
 // { "date" : "2018-02-11", "sellerId" : 1, "buyerId" : 1, "fishId" : 1, "countryId" : 2, "price" : 1.05, "quantity" : 10 }
 router.post("/", function(req, res) {
