@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
 var BuyerSchema = mongoose.Schema({
   id : Number, 
@@ -7,4 +6,4 @@ var BuyerSchema = mongoose.Schema({
   phoneNumber : String 
 });
 
-module.exports = mongoose.model('Buyer', BuyerSchema);
+module.exports = mongoose.model("Buyer", BuyerSchema, "buyer");

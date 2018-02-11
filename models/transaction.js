@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
 var TransactionSchema = mongoose.Schema({
   date : String,
@@ -11,4 +10,4 @@ var TransactionSchema = mongoose.Schema({
   quantity: Number
 });
 
-module.exports = mongoose.model('Transaction', TransactionSchema);
+module.exports = mongoose.model("Transaction", TransactionSchema, "transaction");

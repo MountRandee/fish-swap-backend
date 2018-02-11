@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
 var SellerSchema = mongoose.Schema({
   id : Number, 
@@ -8,4 +7,4 @@ var SellerSchema = mongoose.Schema({
   password: String
 });
 
-module.exports = mongoose.model('Seller', SellerSchema);
+module.exports = mongoose.model("Seller", SellerSchema, "seller");

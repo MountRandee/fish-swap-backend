@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
 var PricesSchema = mongoose.Schema({
   date : String,
@@ -10,4 +9,4 @@ var PricesSchema = mongoose.Schema({
   average: Number
 });
 
-module.exports = mongoose.model('Prices', PricesSchema);
+module.exports = mongoose.model("Prices", PricesSchema, "prices");
