@@ -5,9 +5,11 @@ var
 
 router.get("/", function(req, res) {
   Fish.find(function(err, fishes) {
-    console.log(fishes);
-    if (err) res.send(err);
-    res.send(fishes)
+    if (err) {
+      console.log(err);
+      return res.status(500).send(false);
+    }
+    return res.status(200).send(fishes)
   });
 });
 

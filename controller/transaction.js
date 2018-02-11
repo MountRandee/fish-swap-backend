@@ -11,9 +11,11 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 router.get("/", function(req, res) {
   Transaction.find(function(err, transactions) {
-    console.log(transactions);
-    if (err) res.send(err);
-    res.send(transactions)
+    if (err) {
+      console.log(err);
+      return res.status(500).send(false);
+    }
+    return res.status(200).send(transactions)
   });
 });
 
@@ -22,10 +24,9 @@ router.get("/:n", function(req, res) {
   Transaction.find({"sellerId": sellerId}, function(err, transactions) {
     if (err) {
       console.log(err);
-      res.send(false);
-    } else {
-      res.send(transactions);
+      return res.status(500).send(false);
     }
+    return res.status(200).send(transactions);
   })
 });
 
@@ -39,6 +40,7 @@ router.post("/", function(req, res) {
   // persist the transaction
   transaction.save(function(err, createdObject) {
     if (err) {
+      console.log(err);
       return res.status(500).send(false);
     }
   });
@@ -52,9 +54,7 @@ router.post("/", function(req, res) {
   var transactionPromise = 
     Transaction.find({"fishId" : fishId, "countryId" : countryId}, function(err, transactions) {
       listCount += transactions.length;
-      console.log(transactions);
       transactions.forEach(function(entry) {
-        console.log(entry);
         if (entry.price > max) {
           max = entry.price;
         }

@@ -5,9 +5,11 @@ var
 
 router.get("/", function(req, res) {
   Prices.find(function(err, prices) {
-    console.log(prices);
-    if (err) res.send(err);
-    res.send(prices)
+    if (err) {
+      console.log(err);
+      return res.status(500).send(err);
+    }
+    return res.status(200).send(prices)
   });
 });
 

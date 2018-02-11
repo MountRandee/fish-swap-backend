@@ -5,9 +5,11 @@ var
 
 router.get("/", function(req, res) {
   Country.find(function(err, countries) {
-    console.log(countries);
-    if (err) res.send(err);
-    res.send(countries)
+    if (err) {
+      console.log(err);
+      return res.status(500).send(false);
+    }
+    return res.status(200).send(countries)
   });
 });
 

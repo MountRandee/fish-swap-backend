@@ -5,9 +5,11 @@ var
 
 router.get("/", function(req, res) {
   Buyer.find(function(err, buyers) {
-    console.log(buyers);
-    if (err) res.send(err);
-    res.send(buyers)
+    if (err) {
+      conole.log(err);
+      return res.status(500).send(false);
+    }
+    return res.status(200).send(buyers);
   });
 });
 

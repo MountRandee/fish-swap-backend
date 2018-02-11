@@ -13,21 +13,22 @@ router.post("/", function(req, res) {
   var password = req.body.password;
   
   if (phoneNumber  == null || password == null) {
-    res.send(false);
+    return res.status(500).send(false);
   }
 
   Seller.findOne().
   where('phoneNumber').equals(phoneNumber).
   where('password').equals(password).
   exec(function(err, seller) {
-    if (err) console.log("err:" + err);
-    
-    // res.send did not complete function without else condition !?!
-    if (seller) {
-      res.send(true);
-    } else {
-      res.send(false);
+    if (err) {
+      console.log(err);
+      return res.status(500).send(false);
     }
+    
+    if (seller) {
+      return res.status(200).send(true);
+    }
+    return res.status(500).send(false);
   });
 
 });
