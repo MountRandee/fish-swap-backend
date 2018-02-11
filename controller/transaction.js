@@ -2,7 +2,8 @@ var
   express = require('express'),
   router = express.Router(),
   bodyParser = require('body-parser'),
-  Transaction = require('../models/transaction');
+  Transaction = require('../models/transaction'),
+  Prices = require('../models/prices');
 
 // support json/url encoded bodies
 router.use(bodyParser.json());
@@ -31,12 +32,61 @@ router.get("/:n", function(req, res) {
 // { "date" : "2018-02-11", "sellerId" : 1, "buyerId" : 1, "fishId" : 1, "countryId" : 2, "price" : 1.05, "quantity" : 10 }
 router.post("/", function(req, res) {
   var transaction = new Transaction(req.body);
+  var fishId = transaction.fishId;
+  var countryId = transaction.countryId;
+  var newPrice = transaction.price;
+
+  // persist the transaction
   transaction.save(function(err, createdObject) {
     if (err) {
-      res.status(500).send(false);
+      return res.status(500).send(false);
     }
-    res.status(200).send(true);
   });
+
+  var max = newPrice;
+  var min = newPrice;
+  var priceSum = newPrice;
+  var listCount = 1;
+
+  // find transactions by fishId, countryId and determine new max/min/avg
+  var transactionPromise = 
+    Transaction.find({"fishId" : fishId, "countryId" : countryId}, function(err, transactions) {
+      listCount += transactions.length;
+      console.log(transactions);
+      transactions.forEach(function(entry) {
+        console.log(entry);
+        if (entry.price > max) {
+          max = entry.price;
+        }
+        if (entry.price < min) {
+          min = entry.price
+        }
+        priceSum += entry.price;
+      }); 
+    })
+    
+  transactionPromise.then(function() {
+    var average = priceSum / listCount;
+  
+    // update price table for the fishId, countryId
+    Prices.findOne({"fishId" : fishId, "countryId" : countryId}, function(err, entry) {
+      if (err) {
+        console.log(err);
+        return res.status(500).send(false);
+      }
+      entry.max = max;
+      entry.min = min;
+      entry.average = average;
+      entry.save(function (err, entry) {
+        if (err) {
+          console.log(err);
+          return res.status(500).send(false);
+        }
+        return res.status(200).send(true);
+      })
+    })
+  })
+
 });
 
 module.exports = router;
