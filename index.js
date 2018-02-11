@@ -1,3 +1,6 @@
+// environment variables
+require('dotenv').config();
+
 // required modules
 const
   mongoose = require('mongoose'),
@@ -7,28 +10,37 @@ const
 var app = express();
 
 // db models
-var Fish = require('./models/fish');
-var Country = require('./models/country');
-var Buyer = require('./models/buyer');
-var Seller = require('./models/seller');
-var Transaction = require('./models/transaction');
-var Prices = require('./models/prices');
+var 
+  Fish = require('./models/fish'),
+  Country = require('./models/country'),
+  Buyer = require('./models/buyer'),
+  Seller = require('./models/seller'),
+  Transaction = require('./models/transaction'),
+  Prices = require('./models/prices');
 
 // db connection
+var 
+  dbHost = process.env.DB_HOST,
+  dbPort = process.env.DB_PORT,
+  dbUser = process.env.DB_USER,
+  dbPass = process.env.DB_PASS,
+  connectionUrl = 'mongodb://' + dbUser + ':' + dbPass + '@' + dbHost + ':' + dbPort + '/hackathon';
+
+mongoose.connect(connectionUrl);
 
 var db = mongoose.connection;
 db.once('open', function() {
-  console.log("mongodb connection established");
+  console.log("mongodb connection established: " + connectionUrl);
 });
 db.on('error', function() {
-  console.log("mongodb connection failed");
+  console.log("mongodb connection failed: " + + connectionUrl);
 });
 
 // start server
-var server = app.listen(8081, function () {
-  var host = server.address().address
-  var port = server.address().port
-  console.log("Listening at http://%s:%s", host, port);
+var host = process.env.APP_HOST
+var port = process.env.APP_PORT
+var server = app.listen(port, host, ()=> {
+  console.log("Listening at http://%s:%s", host, port)
 });
 
 // ===== ENDPOINTS =====
