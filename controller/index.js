@@ -1,7 +1,9 @@
 var 
   express = require('express'),
-  router = express.Router();
+  router = express.Router(),
+  cors = require('cors');
 
+router.all('*', cors());
 router.use('/fish', require('./fish'));
 router.use('/country', require('./country'));
 router.use('/buyer', require('./buyer'));

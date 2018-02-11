@@ -4,17 +4,13 @@ require('dotenv').config();
 // required modules
 const
   mongoose = require('mongoose'),
-  express = require('express'),
-  cors = require('cors');
+  express = require('express');
 
 // setup variables
 var app = express();
 
 // load all routes
 app.use(require('./controller'))
-
-// enable cors
-app.use(cors())
 
 // db connection
 var 
