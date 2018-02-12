@@ -74,6 +74,26 @@ router.post("/", function(req, res) {
         console.log(err);
         return res.status(500).send(false);
       }
+
+      if (entry == null || entry == undefined) {
+        var newPrice = new Prices();
+        newPrice.average = average;
+        newPrice.max = max;
+        newPrice.min = min;
+        newPrice.fishId = fishId;
+        newPrice.countryId = countryId;
+        // should have new date here, but hack ...
+        newPrice.date = "2018-02-11";
+        newPrice.save(function() {
+          if (err) {
+            console.log(err);
+            return res.status(500).send(false);
+          }
+          return res.status(200).send(true);
+        })
+        return;
+      }
+
       entry.max = max;
       entry.min = min;
       entry.average = average;
